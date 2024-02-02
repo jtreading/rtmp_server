@@ -1,0 +1,132 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Parameters:
+  IngressCIDR:
+    Type: String
+    Description: CIDR range for inbound access.
+    Default: 0.0.0.0/0
+  AllowSSH:
+    Type: String
+    Description: Allow SSH access from the specified CIDR range.
+    AllowedValues: [true, false]
+    Default: false
+  DestinationURL:
+    Type: String
+    Description: The URL of the destination server.
+    Default: rtmp://server/path/streamkey
+  KeypairName:
+    Type: String
+    Description: The name of the EC2 key pair to associate with the instance.
+    Default: RTMPKeypair
+  AMI:
+    Type: String
+    Description: The AMI to use for the instance.
+    Default: ami-058bd2d568351da34
+  ProjectName:
+    Type: String
+    Description: The project name for cost allocation.
+    Default: RTMP-Server
+  Environment:
+    Type: String
+    Description: The environment for cost allocation.
+    Default: Development
+
+Conditions:
+  ShouldAllowSSH:
+    !Equals [true, !Ref AllowSSH]
+
+Resources:
+  EC2Instance:
+    Type: 'AWS::EC2::Instance'
+    Properties:
+      ImageId: !Ref AMI
+      InstanceType: t2.micro
+      KeyName: !Ref KeypairName
+      SecurityGroupIds:
+        - !Ref SecurityGroup
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          # Update and install Nginx
+          sudo apt-get update
+          sudo apt-get install -y nginx
+
+          # Display Nginx version
+          sudo nginx -v
+
+          # Create rtmp configuration file
+          echo 'server {
+              listen 1935;
+              chunk_size 4096;
+
+              application live {
+                  live on;
+                  record off;
+              }
+          }' | sudo tee /etc/nginx/sites-available/rtmp.conf
+
+          # Create a symbolic link to enable the rtmp configuration
+          sudo ln -s /etc/nginx/sites-available/rtmp.conf /etc/nginx/sites-enabled/
+
+          # Disable the default configuration
+          sudo rm /etc/nginx/sites-enabled/default
+
+          # Create a rtmp configuration in conf.d
+          echo 'server {
+              listen 1935;
+              chunk_size 4096;
+
+              application live {
+                  live on;
+                  record off;
+              }
+          }' | sudo tee /etc/nginx/conf.d/rtmp.conf
+
+          # Reload Nginx to apply changes
+          sudo nginx -s reload
+
+          # Display status after setup
+          sudo systemctl status nginx.service
+      Tags:
+        - Key: ProjectName
+          Value: !Ref ProjectName
+        - Key: Environment
+          Value: !Ref Environment
+
+  SecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: Security group for the RTMP server
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 1935
+          ToPort: 1935
+          CidrIp: !Ref IngressCIDR
+        - !If
+          - ShouldAllowSSH
+          - IpProtocol: tcp
+            FromPort: 22
+            ToPort: 22
+            CidrIp: !Ref IngressCIDR
+          - !Ref "AWS::NoValue"
+      Tags:
+        - Key: ProjectName
+          Value: !Ref ProjectName
+        - Key: Environment
+          Value: !Ref Environment
+
+  ElasticIP:
+    Type: 'AWS::EC2::EIP'
+    Properties:
+      Domain: vpc
+      Tags:
+        - Key: ProjectName
+          Value: !Ref ProjectName
+        - Key: Environment
+          Value: !Ref Environment
+
+  IPAssociation:
+    Type: 'AWS::EC2::EIPAssociation'
+    Properties:
+      InstanceId: !Ref EC2Instance
+      EIP: !Ref ElasticIP
