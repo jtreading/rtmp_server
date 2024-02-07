@@ -14,7 +14,7 @@ TEMPLATE_FILE="../CloudFormation/nginx.yml"
 
 # Set parameter values
 IngressIP="0.0.0.0"
-AllowSSH="true"
+AllowSSH="false"
 InstanceType="t2.micro"
 KeypairName="RTMPKeypair"
 AMI="ami-058bd2d568351da34"
