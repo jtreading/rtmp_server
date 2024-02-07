@@ -126,3 +126,10 @@ Resources:
     Properties:
       InstanceId: !Ref EC2Instance
       EIP: !Ref ElasticIP
+
+Outputs:
+  TestURL:
+    Description: The URL to test the RTMP server.
+    Value: !Sub 'rtmp://${ElasticIP}/live/test-key'
+    Export:
+      Name: !Sub '${ProjectName}-${Environment}-RTMP-URL'

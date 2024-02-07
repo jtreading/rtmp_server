@@ -7,7 +7,7 @@ AWS_PROFILE="default"
 AWS_REGION="us-east-1"
 
 # Set the name for your CloudFormation stack
-STACK_NAME="RTMP-Server-Stack-2"
+STACK_NAME="RTMP-Server-Stack-Demo"
 
 # Set the path to your CloudFormation template file
 TEMPLATE_FILE="../CloudFormation/nginx.yml"
@@ -51,6 +51,16 @@ STACK_STATUS=$(aws cloudformation describe-stacks \
 
 if [ $STACK_STATUS = "CREATE_COMPLETE" ]; then
     echo "Stack creation completed successfully."
+    # Get stack outputs
+    echo "Fetching stack outputs..."
+    STACK_OUTPUTS=$(aws cloudformation describe-stacks \
+        --profile $AWS_PROFILE \
+        --region $AWS_REGION \
+        --stack-name $STACK_NAME \
+        --query 'Stacks[0].Outputs')
+
+    echo "Stack outputs:"
+    echo "$STACK_OUTPUTS"
 else
     echo "Stack creation failed. Status: $STACK_STATUS"
 fi
