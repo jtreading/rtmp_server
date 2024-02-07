@@ -38,7 +38,7 @@ The `Configuration` folder includes the `nginx.conf` file representing the Nginx
 
 ### Scripts
 
-The `Scripts` folder contains the `configure_nginx.sh` script, representing the EC2 instance's startup/user-data script. This is for reference only and does not update the CloudFormation template.
+The `Scripts` folder contains the `configure_nginx.sh` script, representing the EC2 instance's startup/user-data script. This is for reference only and does not update the CloudFormation template. It also contains a `deploy.sh` script that uses the AWS CLI to deploy the template.
 
 ## Acknowledgements
 
