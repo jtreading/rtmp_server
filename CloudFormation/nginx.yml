@@ -5,6 +5,10 @@ Parameters:
     Type: String
     Description: IP address for inbound access.
     Default: 0.0.0.0
+  AccessCIDR:
+    Type: String
+    Description: The IP range to allow access to the RTMP server.
+    Default: 0.0.0.0/0
   AllowSSH:
     Type: String
     Description: Allow SSH access from IngressIP.
@@ -98,6 +102,10 @@ Resources:
           FromPort: 1935
           ToPort: 1935
           CidrIp: !Sub '${IngressIP}/32'
+        - IpProtocol: tcp
+          FromPort: 1935
+          ToPort: 1935
+          CidrIp: !Ref AccessCIDR
         - !If
           - ShouldAllowSSH
           - IpProtocol: tcp
