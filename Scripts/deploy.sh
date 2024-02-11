@@ -21,9 +21,10 @@ KeypairName="RTMPKeypair"
 AMI="ami-058bd2d568351da34"
 ProjectName="RTMP-Server"
 Environment="Development"
+YoutubeStreamKey=""
 
 # Define parameters for the parameter overrides
-PARAMETER_OVERRIDES="ParameterKey=IngressIP,ParameterValue=$IngressIP ParameterKey=AccessCIDR,ParameterValue=$AccessCIDR ParameterKey=AllowSSH,ParameterValue=$AllowSSH ParameterKey=InstanceType,ParameterValue=$InstanceType ParameterKey=KeypairName,ParameterValue=$KeypairName ParameterKey=AMI,ParameterValue=$AMI ParameterKey=ProjectName,ParameterValue=$ProjectName ParameterKey=Environment,ParameterValue=$Environment"
+PARAMETER_OVERRIDES="ParameterKey=IngressIP,ParameterValue=$IngressIP ParameterKey=AccessCIDR,ParameterValue=$AccessCIDR ParameterKey=AllowSSH,ParameterValue=$AllowSSH ParameterKey=InstanceType,ParameterValue=$InstanceType ParameterKey=KeypairName,ParameterValue=$KeypairName ParameterKey=AMI,ParameterValue=$AMI ParameterKey=ProjectName,ParameterValue=$ProjectName ParameterKey=Environment,ParameterValue=$Environment ParameterKey=YoutubeStreamKey,ParameterValue=$YoutubeStreamKey"
 
 # Create the CloudFormation stack with parameters
 echo "Creating CloudFormation stack..."

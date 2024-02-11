@@ -35,6 +35,10 @@ Parameters:
     Type: String
     Description: The environment for cost allocation.
     Default: Development
+  YoutubeStreamKey:
+    Type: String
+    Description: The stream key for YouTube.
+    Default: test-key
 
 Conditions:
   ShouldAllowSSH:
@@ -78,6 +82,9 @@ Resources:
                 application live {
                         live on;
                         record off;
+
+                        # Push to YouTube
+                        push rtmp://a.rtmp.youtube.com/live2/${YoutubeStreamKey};
                 }
               }
             }' | sudo tee /etc/nginx/nginx.conf
