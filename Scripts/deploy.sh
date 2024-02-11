@@ -14,6 +14,7 @@ TEMPLATE_FILE="../CloudFormation/nginx.yml"
 
 # Set parameter values
 IngressIP="0.0.0.0"
+AccessCIDR="0.0.0.0/0"
 AllowSSH="false"
 InstanceType="t2.micro"
 KeypairName="RTMPKeypair"
@@ -22,7 +23,7 @@ ProjectName="RTMP-Server"
 Environment="Development"
 
 # Define parameters for the parameter overrides
-PARAMETER_OVERRIDES="ParameterKey=IngressIP,ParameterValue=$IngressIP ParameterKey=AllowSSH,ParameterValue=$AllowSSH ParameterKey=InstanceType,ParameterValue=$InstanceType ParameterKey=KeypairName,ParameterValue=$KeypairName ParameterKey=AMI,ParameterValue=$AMI ParameterKey=ProjectName,ParameterValue=$ProjectName ParameterKey=Environment,ParameterValue=$Environment"
+PARAMETER_OVERRIDES="ParameterKey=IngressIP,ParameterValue=$IngressIP ParameterKey=AccessCIDR,ParameterValue=$AccessCIDR ParameterKey=AllowSSH,ParameterValue=$AllowSSH ParameterKey=InstanceType,ParameterValue=$InstanceType ParameterKey=KeypairName,ParameterValue=$KeypairName ParameterKey=AMI,ParameterValue=$AMI ParameterKey=ProjectName,ParameterValue=$ProjectName ParameterKey=Environment,ParameterValue=$Environment"
 
 # Create the CloudFormation stack with parameters
 echo "Creating CloudFormation stack..."
