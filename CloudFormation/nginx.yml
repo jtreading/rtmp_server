@@ -126,6 +126,16 @@ Resources:
         - Key: Environment
           Value: !Ref Environment
 
+  RTMPKeypair:
+    Type: 'AWS::EC2::KeyPair'
+    Properties:
+      KeyName: !Ref KeypairName
+      Tags:
+        - Key: ProjectName
+          Value: !Ref ProjectName
+        - Key: Environment
+          Value: !Ref Environment
+
   ElasticIP:
     Type: 'AWS::EC2::EIP'
     Properties:

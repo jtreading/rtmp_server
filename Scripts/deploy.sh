@@ -4,7 +4,7 @@
 AWS_PROFILE="default"
 
 # Set the AWS region where you want to deploy the stack
-AWS_REGION="us-east-1"
+AWS_REGION="us-east-2"
 
 # Set the name for your CloudFormation stack
 STACK_NAME="RTMP-Server-Stack-Demo"
@@ -18,7 +18,7 @@ AccessCIDR="0.0.0.0/0"
 AllowSSH="false"
 InstanceType="t2.micro"
 KeypairName="RTMPKeypair"
-AMI="ami-058bd2d568351da34"
+AMI="ami-0ec3d9efceafb89e0"
 ProjectName="RTMP-Server"
 Environment="Development"
 YoutubeStreamKey=""
